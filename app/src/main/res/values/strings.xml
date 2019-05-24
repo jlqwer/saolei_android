@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">扫雷</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">扫雷</string>
+    <string name="nav_header_subtitle">jlqwer@126.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="homepage_button_l">L</string>
+    <string name="homepage_button_m">M</string>
+    <string name="homepage_button_h">H</string>
+    <string name="abouot_app_ico">APP图标</string>
+    <string name="about_version">当前版本:1.0.0</string>
+    <string name="about_update">检查更新</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/game_diy"
+            android:icon="@drawable/icon_diy"
+            android:title="自定义" />
+        <item
+            android:id="@+id/game_log"
+            android:icon="@drawable/icon_log"
+            android:title="游戏记录" />
+        <item
+            android:id="@+id/game_about"
+            android:icon="@drawable/icon_about"
+            android:title="关于" />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/check_update"
+                android:icon="@drawable/icon_update"
+                android:title="检查更新" />
+        </menu>
+    </item>
+
+</menu>
