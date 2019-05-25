@@ -4,21 +4,23 @@ import java.io.BufferedInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.app.Activity;
+import com.google.gson.*;
+import android.content.Context;
+
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View.OnClickListener;
@@ -34,9 +36,10 @@ import android.support.v7.widget.Toolbar;
 import mehdi.sakout.aboutpage.*;
 
 
-import com.google.gson.*;
 
-public class about extends AppCompatActivity{
+
+public class about extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
     String newvurl="";
     private RelativeLayout relativeLayout;
     private Toolbar toolbar;
@@ -75,67 +78,9 @@ public class about extends AppCompatActivity{
 
 
         /*
-        //about.this.setTitle("关于");
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
-        TextView about_ver_update = (TextView)findViewById(R.id.about_update);
-        TextView about_author = (TextView)findViewById(R.id.about_author);
-        about_author.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openurl("https://www.imlhx.com/");
-            }
-        });
-        about_ver_update.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Builder check_update_res = new AlertDialog.Builder(about.this);
-                if(check_update()){
-                    check_update_res.setTitle("检查更新");
-                    check_update_res.setMessage("检测到新版本,是否更新?"+newvurl);
-                    check_update_res.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface d, int arg1) {
-                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(newvurl));
-                            request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
-                            request.setTitle("扫雷");
-                            request.setDescription("正在下载新版本");
-                            DownloadManager downManager = (DownloadManager)getSystemService(about.DOWNLOAD_SERVICE);
-                            request.setDestinationInExternalFilesDir(about.this, Environment.DIRECTORY_DOWNLOADS, "");
 
-                            long id = downManager.enqueue(request);
-                            d.cancel();
 
-                        }
-                    });
-                    check_update_res.setNegativeButton("取消", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface d, int arg1) {
-                            // TODO Auto-generated method stub
-                            d.cancel();
-                        }
-                    });
-                    check_update_res.create();
-                    check_update_res.show();
-
-                }else{
-                    check_update_res.setTitle("检查更新");
-                    check_update_res.setMessage("当前版本已是最新！");
-                    check_update_res.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(final DialogInterface d, final int arg1) {
-                            // TODO Auto-generated method stub
-
-                            d.cancel();
-                        }
-                    });
-                    check_update_res.create();
-                    check_update_res.show();
-                }
-            }
-        });
         */
     }
     public static boolean isQQClientAvailable(Context context) {
@@ -171,57 +116,48 @@ public class about extends AppCompatActivity{
         }
     }
     /*
-    public void openurl(String url){
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
-    public boolean check_update(){
-        String version_server="http://blog.imlhx.com/android/checkupdate";
-        String res="";
 
 
-        try {
-            res= HttpRequest(version_server);
-            Gson gson = new Gson();
-            res=res.substring(1,res.length()-1);
-            res=res.replace("\\", "");
-            updatejson rres = gson.fromJson(res, updatejson.class);
-
-            if(rres.getStatus()==1){
-                newvurl=rres.getUrl();
-                return true;
-            }else{
-                return false;
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            res=e.toString();
-            Toast.makeText(getApplicationContext(), res, Toast.LENGTH_LONG).show();
-            return false;
-        }
-    }
-    public String HttpRequest(String urlstr) throws Exception {
-        String param="?t=d41d8cd98f00b204e9800998ecf8427e&version=1.0.1";
-        URL url = new URL(urlstr+param);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-        // 开始读取远程服务器的响应数据。
-        BufferedInputStream bis = new BufferedInputStream(urlConnection.getInputStream());
-        String res="";
-        byte[] buffer = new byte[1024 * 10];
-        int count = 0;
-        while (true) {
-            count = bis.read(buffer);
-            if (count == -1) {
-                break;
-            }
-
-            res+=(new String(buffer, 0, count, "UTF-8"));
-        }
-
-        bis.close();
-        return res;
-    }
 */
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.game_diy) {
+            Intent intent = new Intent();
+            intent.setClass(about.this, game.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("h", 16);
+            bundle.putInt("l", 16);
+            bundle.putInt("lei",30);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            Toast.makeText(getApplicationContext(), "菜单：自定义 default:30", Toast.LENGTH_SHORT).show();
+            // Handle the camera action
+        } else if (id == R.id.game_log) {
+            Intent intent2 = new Intent(about.this,log.class);
+            startActivity(intent2);
+        } else if (id == R.id.game_about) {
+            Intent intent3 = new Intent(about.this,about.class);
+            startActivity(intent3);
+        }else if (id == R.id.check_update) {
+
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

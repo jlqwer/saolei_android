@@ -2,10 +2,15 @@ package com.imlhx.saolei_android;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
@@ -26,7 +31,8 @@ import javax.xml.datatype.DatatypeConstants.Field;
 
 
 
-public class game extends Activity {
+public class game extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     static int[][] lmap;
     static int[][] vist;
     static int h;
@@ -46,7 +52,9 @@ public class game extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.game_9_9);
+
         Bundle bundle = this.getIntent().getExtras();
+        setTitle(bundle.getString("title"));
         h=bundle.getInt("h");
         l=bundle.getInt("l");
         lei=bundle.getInt("lei");
@@ -76,6 +84,15 @@ public class game extends Activity {
             }
         });
         helper=new lxg_db(game.this);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
     }
     public int nametoid(int a,int b){
         String idstr="";
@@ -154,6 +171,9 @@ public class game extends Activity {
                         ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.f_20));
                     }
 
+                }
+                if(curl==0){
+                    win();
                 }
             }
             wlie_num();
@@ -240,6 +260,7 @@ public class game extends Activity {
                     {
                         ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.lei_20));
                     }
+                    ff--;
                     Toast.makeText(game.this, "游戏结束", Toast.LENGTH_SHORT).show();
                     chronometer.stop();
                     save_log(df.format(new Date()),chronometer.getText().toString(),"失败");
@@ -251,13 +272,19 @@ public class game extends Activity {
             }
             vist[hh][ll]=1;
             ff++;
-            if(ff+fnum>=h*l){
-                Toast.makeText(game.this, "胜利", Toast.LENGTH_SHORT).show();
-                chronometer.stop();
-                save_log(df.format(new Date()),chronometer.getText().toString(),"胜利");
+            if(ff==(l*h)-lei ){
+                win();
             }
         }
 
+
+    }
+    public void win(){
+
+        Toast.makeText(game.this, "胜利", Toast.LENGTH_SHORT).show();
+        chronometer.stop();
+        gameover();
+        save_log(df.format(new Date()),chronometer.getText().toString(),"胜利");
 
     }
     public void wlie_num(){
@@ -287,7 +314,7 @@ public class game extends Activity {
     public void gameover(){
         for(int i=0;i<h;i++){
             for(int j=0;j<l;j++){
-                if(vist[i][j]==0){
+                if(vist[i][j]==0 || vist[i][j]==2){
                     vist[i][j]=1;
                     if(lmap[i][j]==-1){
                         int RId = nametoid(i, j);
@@ -357,4 +384,37 @@ public class game extends Activity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.game_diy) {
+            Toast.makeText(getApplicationContext(), "请从主页进入自定义模式！", Toast.LENGTH_SHORT).show();
+            // Handle the camera action
+        } else if (id == R.id.game_log) {
+            Intent intent2 = new Intent(game.this,log.class);
+            startActivity(intent2);
+        } else if (id == R.id.game_about) {
+            Intent intent3 = new Intent(game.this,about.class);
+            startActivity(intent3);
+        }else if (id == R.id.check_update) {
+
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
