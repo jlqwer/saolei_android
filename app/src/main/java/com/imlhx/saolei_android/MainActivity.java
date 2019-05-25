@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity
             final Check_update check_update = new Check_update();
             if(check_update.check_update(MainActivity.this)){
                 check_update_res.setTitle("检查更新");
-                check_update_res.setMessage("检测到新版本,是否更新?"+check_update.newvurl);
+                check_update_res.setMessage("检测到新版本,是否更新?\n"+check_update.newvurl);
                 check_update_res.setPositiveButton("确定", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int arg1) {
