@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,10 +19,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
     }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -106,16 +106,43 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.game_diy) {
-            Intent intent = new Intent();
-            intent.setClass(MainActivity.this, game.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("h", 16);
-            bundle.putInt("l", 16);
-            bundle.putInt("lei",30);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            Toast.makeText(getApplicationContext(), "菜单：自定义 default:30", Toast.LENGTH_SHORT).show();
-            // Handle the camera action
+
+
+
+           LinearLayout diy =(LinearLayout)getLayoutInflater().inflate(R.layout.activity_diy,null);
+
+            AlertDialog.Builder dialog =new AlertDialog.Builder(MainActivity.this);
+                    dialog.setTitle("自定义").setMessage("请输入雷数").setView(diy);
+            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    EditText editText = (EditText)diy.findViewById(R.id.diynum);
+                    Toast.makeText(MainActivity.this, (CharSequence) editText,Toast.LENGTH_LONG).show();
+                    /*
+                     String   sss =editText.getText().toString();
+                      int lll= Integer.valueOf(sss);
+                    if(lll>10 && lll<99){
+                        Intent intent = new Intent();
+                        intent.setClass(MainActivity.this, game.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("h", 16);
+                        bundle.putInt("l", 16);
+                        bundle.putInt("lei",lll);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(MainActivity.this,"请输入一个10-99的数字",Toast.LENGTH_SHORT).show();
+                    }*/
+                }
+            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.create();
+            dialog.show();
+           // Handle the camera action
         } else if (id == R.id.game_log) {
             Intent intent2 = new Intent(MainActivity.this,log.class);
             startActivity(intent2);
