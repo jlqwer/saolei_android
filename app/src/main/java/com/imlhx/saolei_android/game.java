@@ -172,7 +172,7 @@ public class game extends AppCompatActivity
                     }
 
                 }
-                if(curl==0){
+                if(curl==lei){
                     win();
                 }
             }
