@@ -34,7 +34,7 @@ import android.widget.Toast;
 public class Check_update {
     String newvurl="";
     public boolean check_update(Context context){
-        String version_server="https://blog.imlhx.com/android/checkupdate";
+        String version_server="https://me.imlhx.com/android/checkupdate";
         String res="";
 
 

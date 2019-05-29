@@ -1,12 +1,18 @@
 package com.imlhx.saolei_android;
 
+import android.app.DownloadManager;
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -52,7 +58,8 @@ public class game extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.game_9_9);
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         Bundle bundle = this.getIntent().getExtras();
         setTitle(bundle.getString("title"));
         h=bundle.getInt("h");
@@ -172,7 +179,7 @@ public class game extends AppCompatActivity
                     }
 
                 }
-                if(curl==0){
+                if(curl==lei){
                     win();
                 }
             }
@@ -380,6 +387,7 @@ public class game extends AppCompatActivity
                 }
             }
         }
+        wlie_num();
         android.widget.Toast.makeText(game.this, "初始化完成", Toast.LENGTH_SHORT).show();
     }
 
@@ -410,7 +418,50 @@ public class game extends AppCompatActivity
             Intent intent3 = new Intent(game.this,about.class);
             startActivity(intent3);
         }else if (id == R.id.check_update) {
+            AlertDialog.Builder check_update_res = new AlertDialog.Builder(game.this);
+            final Check_update check_update = new Check_update();
+            if(check_update.check_update(game.this)){
+                check_update_res.setTitle("检查更新");
+                check_update_res.setMessage("检测到新版本,是否更新?\n"+check_update.newvurl);
+                check_update_res.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface d, int arg1) {
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(check_update.newvurl));
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+                        request.setTitle("扫雷");
+                        request.setDescription("正在下载新版本");
+                        DownloadManager downManager = (DownloadManager)getSystemService(about.DOWNLOAD_SERVICE);
+                        request.setDestinationInExternalFilesDir(game.this, Environment.DIRECTORY_DOWNLOADS, "");
 
+                        long id = downManager.enqueue(request);
+                        d.cancel();
+
+                    }
+                });
+                check_update_res.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface d, int arg1) {
+                        // TODO Auto-generated method stub
+                        d.cancel();
+                    }
+                });
+                check_update_res.create();
+                check_update_res.show();
+
+            }else{
+                check_update_res.setTitle("检查更新");
+                check_update_res.setMessage("当前版本已是最新！");
+                check_update_res.setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(final DialogInterface d, final int arg1) {
+                        // TODO Auto-generated method stub
+
+                        d.cancel();
+                    }
+                });
+                check_update_res.create();
+                check_update_res.show();
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

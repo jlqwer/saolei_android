@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-           LinearLayout diy =(LinearLayout)getLayoutInflater().inflate(R.layout.activity_diy,null);
+           final LinearLayout diy =(LinearLayout)getLayoutInflater().inflate(R.layout.activity_diy,null);
 
             AlertDialog.Builder dialog =new AlertDialog.Builder(MainActivity.this);
                     dialog.setTitle("自定义").setMessage("请输入雷数").setView(diy);
@@ -117,8 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     EditText editText = (EditText)diy.findViewById(R.id.diynum);
-                    Toast.makeText(MainActivity.this, (CharSequence) editText,Toast.LENGTH_LONG).show();
-                    /*
+
                      String   sss =editText.getText().toString();
                       int lll= Integer.valueOf(sss);
                     if(lll>10 && lll<99){
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         startActivity(intent);
                     }else {
                         Toast.makeText(MainActivity.this,"请输入一个10-99的数字",Toast.LENGTH_SHORT).show();
-                    }*/
+                    }
                 }
             }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override
